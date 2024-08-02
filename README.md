@@ -1,5 +1,8 @@
-# JL3-Pos
+# React + Vite
 
-# Before we use this since I dont know how to easy install all the libraries this are the libraries you need to install first.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-# pip install tk
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
