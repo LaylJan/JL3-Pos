@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./Navbar";
+import Cashier from "./Pages/Items";
+import Inventory from "./Pages/Inventory";
+import Sales from "./Pages/Sales";
+import Refund from "./Pages/Refund";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -19,7 +24,23 @@ function App() {
   }, []);
   return (
     <div>
-      <Navbar />
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <div>
+                <Cashier /> <h1>asd</h1>
+              </div>
+            }
+          />
+          <Route path="/inventory" element={<Inventory />} />
+          <Route path="/sales" element={<Sales />} />
+          <Route path="/refund" element={<Refund />} />
+        </Routes>
+      </Router>
+
       {/* <h2 className="text-xl">Product List</h2>
       <ul>
         {products.map((product, index) => (
