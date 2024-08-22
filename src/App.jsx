@@ -30,8 +30,11 @@ function App() {
           <Route
             path="/"
             element={
-              <div>
-                <Cashier /> <h1>asd</h1>
+              <div className="flex m-2">
+                <div className="w-1/2">
+                  <Cashier />
+                </div>
+                <div>Temporary List of items</div>
               </div>
             }
           />

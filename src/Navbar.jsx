@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = ({}) => {
-  const navigate = useNavigate();
   return (
     <div>
       <nav className="bg-green-500 p-4">
