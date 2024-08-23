@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import { WebSocketServer } from "ws";
 
 const app = express();
 const port = 5000; // Backend will run on localhost:5000
@@ -59,6 +60,35 @@ app.post("/api/Products", async (req, res) => {
 });
 
 // Start the server
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Backend server running on http://localhost:${port}`);
+});
+
+// Set up WebSocket server
+const wss = new WebSocketServer({ server });
+
+wss.on("connection", (ws) => {
+  console.log("Client connected via WebSocket");
+
+  // Send a welcome message to the client
+  ws.send(JSON.stringify({ message: "Connected to WebSocket server" }));
+
+  ws.on("close", () => {
+    console.log("Client disconnected from WebSocket");
+  });
+});
+
+// Set up MongoDB Change Stream
+const changeStream = Product.watch();
+
+changeStream.on("change", (change) => {
+  console.log("Change detected:", change);
+
+  // Broadcast the change to all connected WebSocket clients
+  wss.clients.forEach((client) => {
+    if (client.readyState === 1) {
+      // Ensure the client is connected
+      client.send(JSON.stringify(change));
+    }
+  });
 });

@@ -5,15 +5,61 @@ const Items = ({}) => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    // Fetch products from the local backend
+    // Fetch products from the local backend when the component mounts
     axios
-      .get("http://localhost:5000/api/products")
+      .get("http://localhost:5000/api/Products")
       .then((response) => {
         setProducts(response.data);
       })
       .catch((error) => {
         console.error("There was an error fetching the products!", error);
       });
+
+    // Set up WebSocket connection for real-time updates
+    const ws = new WebSocket("ws://localhost:5000");
+
+    ws.onopen = () => {
+      console.log("Connected to WebSocket server");
+    };
+
+    ws.onmessage = (event) => {
+      const change = JSON.parse(event.data);
+      console.log("Received change from WebSocket:", change);
+
+      // Handle different types of changes
+      switch (change.operationType) {
+        case "insert":
+          setProducts((prevProducts) => [...prevProducts, change.fullDocument]);
+          break;
+        case "update":
+          setProducts((prevProducts) =>
+            prevProducts.map((product) =>
+              product._id === change.documentKey._id
+                ? { ...product, ...change.updateDescription.updatedFields }
+                : product
+            )
+          );
+          break;
+        case "delete":
+          setProducts((prevProducts) =>
+            prevProducts.filter(
+              (product) => product._id !== change.documentKey._id
+            )
+          );
+          break;
+        default:
+          break;
+      }
+    };
+
+    ws.onclose = () => {
+      console.log("WebSocket connection closed");
+    };
+
+    // Clean up the WebSocket connection when the component unmounts
+    return () => {
+      ws.close();
+    };
   }, []);
   return (
     <div className="grid grid-cols-4 gap-4 p-2">
