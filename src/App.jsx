@@ -7,6 +7,7 @@ import Cashier from "./Pages/Items";
 import Inventory from "./Pages/Inventory";
 import Sales from "./Pages/Sales";
 import Refund from "./Pages/Refund";
+import Reciept from "./Pages/Reciept";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -34,7 +35,7 @@ function App() {
                 <div className="w-1/2">
                   <Cashier />
                 </div>
-                <div>Temporary List of items</div>
+                <Reciept />
               </div>
             }
           />
@@ -43,15 +44,6 @@ function App() {
           <Route path="/refund" element={<Refund />} />
         </Routes>
       </Router>
-
-      {/* <h2 className="text-xl">Product List</h2>
-      <ul>
-        {products.map((product, index) => (
-          <li key={index}>
-            {product.Product} - {product.Price}
-          </li>
-        ))}
-      </ul> */}
     </div>
   );
 }
