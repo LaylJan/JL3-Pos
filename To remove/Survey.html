@@ -1,0 +1,115 @@
+<h1 id="title">Favorite Avengers Movie</h1>
+<p id="description">What is your favorite avengers film?</p>
+<form id="survey-form">
+  <label for="name" id="name-label">Name:</label>
+  <input
+    type="text"
+    id="name"
+    name="name"
+    placeholder="Enter your name"
+    required
+  />
+  <br />
+  <label id="email-label">Email:</label>
+  <input
+    type="email"
+    id="email"
+    name="email"
+    placeholder="Enter a valid email"
+    required
+  /><br />
+  <label id="number-label">Age:</label>
+  <input
+    type="number"
+    id="number"
+    name="age"
+    placeholder="age"
+    min="1"
+    max="150"
+  /><br />
+
+  <label for="gender">Gender:</label>
+  <select id="dropdown" name="gender">
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+  </select>
+  <br />
+  <fieldset>
+    <legend>Fan Preference:</legend>
+    <label for="not-a-fan">
+      <input
+        type="radio"
+        id="not-a-fan"
+        name="fan-preference"
+        value="not-a-fan"
+      />
+      Not a Fan
+    </label>
+    <br />
+    <label for="standard-fan">
+      <input
+        type="radio"
+        id="standard-fan"
+        name="fan-preference"
+        value="standard-fan"
+      />
+      Standard Fan
+    </label>
+    <br />
+    <label for="absolute-fan">
+      <input
+        type="radio"
+        id="absolute-fan"
+        name="fan-preference"
+        value="absolute-fan"
+      />
+      Absolute Fan
+    </label>
+  </fieldset>
+  <br />
+
+  <label for="Avengers">
+    <input type="checkbox" id="Avengers" name="Avengers" value="Avengers" />
+    Avengers
+  </label>
+  <br />
+  <label for="Avengers: Age of ultron">
+    <input
+      type="checkbox"
+      id="Avengers: Age of ultron"
+      name="Avengers: Age of ultron"
+      value="Avengers: Age of ultron"
+    />
+    Avengers: Age of ultron
+  </label>
+  <br />
+  <label for="Avengers: Infinity War">
+    <input
+      type="checkbox"
+      id="Avengers: Infinity War"
+      name="Avengers: Infinity War"
+      value="Avengers: Infinity War"
+    />
+    Avengers: Infinity War
+  </label>
+  <br />
+  <label for="Avengers: Endgame">
+    <input
+      type="checkbox"
+      id="Avengers: Endgame"
+      name="Avengers: Endgame"
+      value="Avengers: Endgame"
+    />
+    Avengers: Endgame </label
+  ><br /><br />
+  <label for="comments">Why are those your favorite?:</label><br />
+  <textarea
+    id="comments"
+    name="comments"
+    rows="5"
+    cols="30"
+    placeholder="Explain here..."
+  ></textarea>
+  <br /><br />
+  <button type="submit" id="submit">Submit</button>
+</form>
