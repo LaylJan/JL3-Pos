@@ -45,7 +45,7 @@ const Reciept = ({}) => {
                 <button className="bg-white border shadow-sm rounded-lg p-2 pt-1 w-[3rem] h-[2rem] hover:bg-gray-100 transition-all duration-200 ease-in-out break-words flex items-center justify-center">
                   <div className="text-center">
                     <p className="text-gray-800 font-semibold text-xl break-words">
-                      +
+                      -
                     </p>
                   </div>
                 </button>
@@ -53,7 +53,7 @@ const Reciept = ({}) => {
                 <button className="bg-white border shadow-sm rounded-lg p-2 pt-1 w-[3rem] h-[2rem] hover:bg-gray-100 transition-all duration-200 ease-in-out break-words flex items-center justify-center">
                   <div className="text-center">
                     <p className="text-gray-800 font-semibold text-xl break-words">
-                      -
+                      +
                     </p>
                   </div>
                 </button>

@@ -37,9 +37,18 @@ const productSchema = new mongoose.Schema({
   LastUpdatedDate: Date,
 });
 
-const Product = mongoose.model("product", productSchema, "Products"); // Specify the collection name explicitly
+const receiptSchema = new mongoose.Schema({
+  Product: String,
+  Quantity: Number,
+  Price: Number,
+  TotalAmount: Number,
+});
 
-// Routes
+// Create Mongoose models
+const Product = mongoose.model("Product", productSchema, "Products");
+const Receipt = mongoose.model("Receipt", receiptSchema, "Receipt");
+
+// Routes for Products
 app.get("/api/Products", async (req, res) => {
   try {
     const products = await Product.find();
@@ -54,6 +63,26 @@ app.post("/api/Products", async (req, res) => {
     const newProduct = new Product(req.body);
     await newProduct.save();
     res.json(newProduct);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Routes for Receipts
+app.get("/api/Receipt", async (req, res) => {
+  try {
+    const receipts = await Receipt.find();
+    res.json(receipts);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post("/api/Receipt", async (req, res) => {
+  try {
+    const newReceipt = new Receipt(req.body);
+    await newReceipt.save();
+    res.json(newReceipt);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
