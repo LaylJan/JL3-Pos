@@ -107,54 +107,63 @@ const Inventory = ({}) => {
                 })
               }
             />
+            <div className="flex mt-2 mb-2">
+              <label
+                htmlFor="productPrice"
+                className="block mt-2 font-semibold mr-1"
+              >
+                Price:
+              </label>
+              <input
+                type="text"
+                id="productPrice"
+                value={selectedProduct.Price}
+                className="border rounded p-2 w-1/4"
+                onChange={(e) =>
+                  setSelectedProduct({
+                    ...selectedProduct,
+                    Price: e.target.value,
+                  })
+                }
+              />
 
-            <label htmlFor="productPrice" className="block mt-2 font-semibold">
-              Price:
-            </label>
-            <input
-              type="text"
-              id="productPrice"
-              value={selectedProduct.Price}
-              className="border rounded p-2 w-full"
-              onChange={(e) =>
-                setSelectedProduct({
-                  ...selectedProduct,
-                  Price: e.target.value,
-                })
-              }
-            />
-
-            <label htmlFor="category" className="block mt-2 font-semibold">
-              Category:
-            </label>
-            <input
-              type="text"
-              id="category"
-              value={selectedProduct.Category}
-              className="border rounded p-2 w-full"
-              onChange={(e) =>
-                setSelectedProduct({
-                  ...selectedProduct,
-                  Category: e.target.value,
-                })
-              }
-            />
-
-            <label htmlFor="stock" className="block mt-2 font-semibold">
-              Stock:
-            </label>
-            <input
-              type="text"
-              id="stock"
-              value={selectedProduct.Stock}
-              className="border rounded p-2 w-full"
-              onChange={(e) =>
-                setSelectedProduct({
-                  ...selectedProduct,
-                  Stock: e.target.value,
-                })
-              }
-            />
+              <label
+                htmlFor="category"
+                className="block mt-2 font-semibold ml-2 mr-1"
+              >
+                Category:
+              </label>
+              <input
+                type="text"
+                id="category"
+                value={selectedProduct.Category}
+                className="border rounded p-2 w-full"
+                onChange={(e) =>
+                  setSelectedProduct({
+                    ...selectedProduct,
+                    Category: e.target.value,
+                  })
+                }
+              />
+              <label
+                htmlFor="stock"
+                className="block mt-2 font-semibold mr-1 ml-1"
+              >
+                Stock:
+              </label>
+              <input
+                type="text"
+                id="stock"
+                value={selectedProduct.Stock}
+                className="border rounded p-2 w-1/4"
+                onChange={(e) =>
+                  setSelectedProduct({
+                    ...selectedProduct,
+                    Stock: e.target.value,
+                  })
+                }
+              />
+            </div>
 
             <h2 className="mt-4 font-semibold">Supplier Information</h2>
 
@@ -203,7 +212,7 @@ const Inventory = ({}) => {
               type="submit"
               className="mt-4 bg-blue-500 text-white font-semibold p-2 rounded"
             >
-              Change
+              Save changes
             </button>
           </form>
         )}
