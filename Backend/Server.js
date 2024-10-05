@@ -39,7 +39,7 @@ const productSchema = new mongoose.Schema({
 
 const receiptSchema = new mongoose.Schema({
   Product: String,
-  Quantity: Number,
+  qty: Number,
   Price: Number,
   TotalAmount: Number,
 });
@@ -120,4 +120,26 @@ changeStream.on("change", (change) => {
       client.send(JSON.stringify(change));
     }
   });
+});
+
+app.put("/api/receipt/:id", async (req, res) => {
+  const { id } = req.params;
+  const { qty } = req.body;
+
+  try {
+    const updatedReceipt = await Receipt.findByIdAndUpdate(
+      id,
+      { qty }, // Update the Quantity field
+      { new: true } // Return the updated document
+    );
+    if (updatedReceipt) {
+      console.log("Successfully updated Receipt:", updatedReceipt);
+    } else {
+      console.log("No receipt found with the given ID.");
+    }
+
+    res.json(updatedReceipt);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
