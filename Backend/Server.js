@@ -143,3 +143,14 @@ app.put("/api/receipt/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+app.get("/api/receipt", async (req, res) => {
+  const { product } = req.query;
+
+  try {
+    const receiptItem = await Receipt.findOne({ product });
+    res.json(receiptItem);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
