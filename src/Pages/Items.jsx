@@ -65,49 +65,66 @@ const Items = ({}) => {
   const handleAddToReceipt = (product) => {
     // Check if the product is already in the receipt
     console.log("Product passed to function:", product.Product);
+
+    // Initialize an empty object to store receipt items
+    const receiptItems = {};
+
+    // Fetch all items in the receipt
     axios
-      .get(`http://localhost:5000/api/Receipt?product=${product.Product}`)
+      .get(`http://localhost:5000/api/Receipt`)
       .then((response) => {
-        const receiptItem = response.data;
+        const items = response.data; // Assume this is an array of receipt items
 
-        if (receiptItem) {
-          console.log("Found receipt item:", receiptItem);
+        // Populate the receiptItems object
+        items.forEach((item) => {
+          receiptItems[item.product] = item; // Use product name as the key
+        });
 
-          // Use _id or id depending on what is available
-          const receiptItemId = receiptItem._id || receiptItem.id;
+        if (receiptItems[product.Product]) {
+          // Product exists in the receipt, increment the qty
+          const existingItem = receiptItems[product.Product];
+          const updatedQty = existingItem.qty + 1;
+          const updatedTotal = updatedQty * existingItem.price;
 
-          if (!receiptItemId) {
-            console.error("Receipt item ID is missing.");
-            return;
-          }
-
-          // If the product is already in the receipt, increment the quantity
+          // Send PUT request to update the existing receipt entry
           axios
-            .put(`http://localhost:5000/api/Receipt/${receiptItemId}`, {
-              qty: receiptItem.qty + 1, // Increment quantity
+            .put(`http://localhost:5000/api/Receipt/${existingItem._id}`, {
+              qty: updatedQty,
+              total: updatedTotal,
             })
-            .then((res) => {
-              console.log("Quantity incremented", res.data);
+            .then(() => {
+              console.log(
+                "Successfully updated receipt with incremented quantity"
+              );
             })
-            .catch((err) => console.error("Failed to increment qty", err));
+            .catch((error) => {
+              console.error("Error updating receipt:", error);
+            });
         } else {
-          // If the product is not in the receipt, add it to the receipt with quantity 1
-          console.log("Product not in receipt, adding it now.");
+          // Product does not exist in the receipt, create a new entry
+          const newReceiptItem = {
+            product: product.Product,
+            price: product.Price,
+            qty: 1, // initial quantity
+            total: product.Price, // initial total
+            amount: product.Price, // total amount (assuming it's same as price initially)
+          };
+
           axios
-            .post("http://localhost:5000/api/Receipt", {
-              product: product.Product,
-              qty: 1,
-              price: product.Price,
-              total: product.Price * 1, // Initial total = price * 1
+            .post("http://localhost:5000/api/Receipt", newReceiptItem)
+            .then(() => {
+              console.log("Successfully added new item to the receipt");
             })
-            .then((res) => {
-              console.log("Product added to receipt", res.data);
-            })
-            .catch((err) => console.error("Failed to add to receipt", err));
+            .catch((error) => {
+              console.error("Error adding item to the receipt:", error);
+            });
         }
       })
-      .catch((err) => console.error("Error fetching receipt", err));
+      .catch((error) => {
+        console.error("Error fetching receipt items:", error);
+      });
   };
+
   return (
     <div className="grid grid-cols-4 gap-4 p-2">
       {products.map((product, index) => (

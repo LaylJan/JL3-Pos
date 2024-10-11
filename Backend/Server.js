@@ -144,12 +144,12 @@ app.put("/api/receipt/:id", async (req, res) => {
   }
 });
 
-app.get("/api/receipt", async (req, res) => {
+app.get("/api/Receipt", async (req, res) => {
   const { product } = req.query;
 
   try {
-    const receiptItem = await Receipt.findOne({ product });
-    res.json(receiptItem);
+    const receiptItem = await Receipt.findOne({ product }); // Find the item by product
+    res.json(receiptItem); // Send the item directly, it will be null if not found
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
