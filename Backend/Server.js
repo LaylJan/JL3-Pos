@@ -49,7 +49,6 @@ const receiptSchema = new Schema({
 // Create Mongoose models
 const Product = mongoose.model("Product", productSchema, "Products");
 const Receipt = mongoose.model("Receipt", receiptSchema, "Receipt");
-export default Receipt;
 
 // Routes for Products
 app.get("/api/Products", async (req, res) => {
@@ -174,4 +173,19 @@ app.post("/api/Receipt", async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+// Set up MongoDB Change Stream for Receipts
+const receiptChangeStream = Receipt.watch();
+
+receiptChangeStream.on("change", (change) => {
+  console.log("Receipt Change detected:", change);
+
+  // Broadcast the change to all connected WebSocket clients
+  wss.clients.forEach((client) => {
+    if (client.readyState === 1) {
+      // Ensure the client is connected
+      client.send(JSON.stringify(change));
+    }
+  });
 });
