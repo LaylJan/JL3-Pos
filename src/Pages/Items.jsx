@@ -66,7 +66,6 @@ const Items = ({}) => {
     // Check if the product is already in the receipt
     console.log("Product passed to function:", product.Product);
 
-    // Initialize an empty object to store receipt items
     const receiptItems = {};
 
     // Fetch all items in the receipt
@@ -79,6 +78,7 @@ const Items = ({}) => {
         items.forEach((item) => {
           receiptItems[item.product] = item; // Use product name as the key
         });
+        console.log(product.Product);
 
         if (receiptItems[product.Product]) {
           // Product exists in the receipt, increment the qty
@@ -103,13 +103,13 @@ const Items = ({}) => {
         } else {
           // Product does not exist in the receipt, create a new entry
           const newReceiptItem = {
-            product: product.Product,
-            price: product.Price,
-            qty: 1, // initial quantity
-            total: product.Price, // initial total
-            amount: product.Price, // total amount (assuming it's same as price initially)
+            product: product.Product, // Include product name
+            price: product.Price, // Include product price
+            qty: 1, // Initial quantity
+            total: product.Price, // Initial total
+            amount: product.Price, // Assuming amount is the same as price initially
           };
-
+          console.log(newReceiptItem);
           axios
             .post("http://localhost:5000/api/Receipt", newReceiptItem)
             .then(() => {

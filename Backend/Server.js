@@ -5,6 +5,7 @@ import { WebSocketServer } from "ws";
 
 const app = express();
 const port = 5000; // Backend will run on localhost:5000
+const { Schema } = mongoose;
 
 // Middleware
 app.use(
@@ -37,16 +38,18 @@ const productSchema = new mongoose.Schema({
   LastUpdatedDate: Date,
 });
 
-const receiptSchema = new mongoose.Schema({
-  Product: String,
-  qty: Number,
-  Price: Number,
-  TotalAmount: Number,
+const receiptSchema = new Schema({
+  product: { type: String, required: true },
+  price: { type: Number, required: true },
+  qty: { type: Number, required: true },
+  total: { type: Number, required: true },
+  amount: { type: Number, required: true },
 });
 
 // Create Mongoose models
 const Product = mongoose.model("Product", productSchema, "Products");
 const Receipt = mongoose.model("Receipt", receiptSchema, "Receipt");
+export default Receipt;
 
 // Routes for Products
 app.get("/api/Products", async (req, res) => {
@@ -150,6 +153,24 @@ app.get("/api/Receipt", async (req, res) => {
   try {
     const receiptItem = await Receipt.findOne({ product }); // Find the item by product
     res.json(receiptItem); // Send the item directly, it will be null if not found
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post("/api/Receipt", async (req, res) => {
+  try {
+    const { product, price, qty, total, amount } = req.body; // Ensure all fields are captured
+    const newReceiptItem = new Receipt({
+      product,
+      price,
+      qty,
+      total,
+      amount,
+    });
+
+    await newReceiptItem.save();
+    res.status(201).json(newReceiptItem);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
