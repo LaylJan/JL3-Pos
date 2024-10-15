@@ -106,7 +106,7 @@ const Reciept = ({}) => {
                   <button
                     className="bg-white border shadow-sm rounded-lg p-2 pt-1 w-[3rem] h-[2rem] hover:bg-gray-100 transition-all duration-200 ease-in-out break-words flex items-center justify-center"
                     onClick={() => {
-                      if (product.qty > 0) {
+                      if (product.qty > 1) {
                         // Update the qty in the backend
                         axios
                           .put(
@@ -127,6 +127,26 @@ const Reciept = ({}) => {
                           })
                           .catch((error) => {
                             console.error("Failed to update qty", error);
+                          });
+                      } else {
+                        // If the quantity reaches 0, delete the receipt entry
+                        axios
+                          .delete(
+                            `http://localhost:5000/api/receipt/${product.product}`
+                          )
+                          .then(() => {
+                            // Remove the product from the state after successful deletion
+                            setProducts((prevProducts) =>
+                              prevProducts.filter(
+                                (p) => p.product !== product.product
+                              )
+                            );
+                          })
+                          .catch((error) => {
+                            console.error(
+                              "Failed to delete the receipt",
+                              error
+                            );
                           });
                       }
                     }}

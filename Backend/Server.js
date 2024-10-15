@@ -109,21 +109,6 @@ wss.on("connection", (ws) => {
   });
 });
 
-// Set up MongoDB Change Stream
-const changeStream = Product.watch();
-
-changeStream.on("change", (change) => {
-  console.log("Change detected:", change);
-
-  // Broadcast the change to all connected WebSocket clients
-  wss.clients.forEach((client) => {
-    if (client.readyState === 1) {
-      // Ensure the client is connected
-      client.send(JSON.stringify(change));
-    }
-  });
-});
-
 app.put("/api/receipt/:id", async (req, res) => {
   const { id } = req.params;
   const { qty } = req.body;
@@ -173,6 +158,35 @@ app.post("/api/Receipt", async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+app.delete("/api/receipt/:product", async (req, res) => {
+  try {
+    const { product } = req.params;
+    const deletedReceipt = await Receipt.findOneAndDelete({ product });
+    if (deletedReceipt) {
+      res.status(200).json({ message: "Receipt item removed successfully" });
+    } else {
+      res.status(404).json({ message: "Receipt item not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Set up MongoDB Change Stream
+const changeStream = Product.watch();
+
+changeStream.on("change", (change) => {
+  console.log("Change detected:", change);
+
+  // Broadcast the change to all connected WebSocket clients
+  wss.clients.forEach((client) => {
+    if (client.readyState === 1) {
+      // Ensure the client is connected
+      client.send(JSON.stringify(change));
+    }
+  });
 });
 
 // Set up MongoDB Change Stream for Receipts
