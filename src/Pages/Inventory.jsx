@@ -69,7 +69,7 @@ const Inventory = ({}) => {
   return (
     <div className="flex m-2">
       {/* Product Grid */}
-      <div className="w-1/2 grid grid-cols-3 gap-2 p-2">
+      <div className="w-1/2 grid grid-cols-4 gap-2 p-2">
         {products.map((product, index) => (
           <button
             key={index}

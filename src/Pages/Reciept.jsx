@@ -199,6 +199,13 @@ const Reciept = ({}) => {
           </tbody>
         </table>
       </div>
+      <div className="fixed bottom-0 left-0 right-0 bg-white px-6 py-4 text-xl font-semibold text-gray-900 flex justify-end border-t shadow-md">
+        Total: ₱
+        {products.reduce(
+          (acc, product) => acc + product.price * product.qty,
+          0
+        )}
+      </div>
     </div>
   );
 };
