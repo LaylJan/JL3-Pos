@@ -3,6 +3,26 @@ import axios from "axios";
 
 const Reciept = ({}) => {
   const [products, setProducts] = useState([]);
+  const [payment, setPayment] = useState("");
+  const [total, setTotal] = useState(0);
+  const [change, setChange] = useState(null);
+
+  useEffect(() => {
+    // Calculate the total
+    const totalAmount = products.reduce(
+      (acc, product) => acc + product.price * product.qty,
+      0
+    );
+    setTotal(totalAmount);
+
+    // Calculate the change, only if payment is entered
+    const numericPayment = parseFloat(payment) || 0;
+    if (payment) {
+      setChange(payment - totalAmount);
+    } else {
+      setChange(null); // Reset if no payment is entered
+    }
+  }, [products, payment]);
 
   useEffect(() => {
     // Fetch products from the local backend when the component mounts
@@ -199,12 +219,48 @@ const Reciept = ({}) => {
           </tbody>
         </table>
       </div>
-      <div className="fixed bottom-0 left-0 right-0 bg-white px-6 py-4 text-xl font-semibold text-gray-900 flex justify-end border-t shadow-md">
-        Total: ₱
-        {products.reduce(
-          (acc, product) => acc + product.price * product.qty,
-          0
-        )}
+      <div className="fixed bottom-0 left-0 right-0 bg-white px-6 py-4 text-xl font-semibold text-gray-900 flex justify-between items-center border-t shadow-md">
+        <div className="flex items-center space-x-4">
+          <label
+            htmlFor="payment"
+            className="block mb-2 text-lg font-medium text-gray-700"
+          >
+            Payment
+          </label>
+          <input
+            type="number"
+            id="payment"
+            className="p-2 border rounded-md w-44 text-gray-700"
+            placeholder="Enter payment"
+            value={payment}
+            onChange={(e) => {
+              const inputValue = e.target.value;
+              // Only update the payment value with the input, or keep it an empty string when cleared
+              setPayment(inputValue === "" ? "" : inputValue);
+            }}
+          />
+        </div>
+
+        <div className="flex items-center space-x-4">
+          <p>Total: ₱{total}</p>
+
+          {/* Only show the change if payment is entered */}
+          {change !== null && <p>Change: ₱{change}</p>}
+
+          <button
+            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all"
+            onClick={() => console.log("Void transaction")}
+          >
+            Void
+          </button>
+
+          <button
+            className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-all"
+            onClick={() => console.log("End transaction")}
+          >
+            End Transaction
+          </button>
+        </div>
       </div>
     </div>
   );
