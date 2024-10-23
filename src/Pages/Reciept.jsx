@@ -223,9 +223,9 @@ const Reciept = ({}) => {
         <div className="flex items-center space-x-4">
           <label
             htmlFor="payment"
-            className="block mb-2 text-lg font-medium text-gray-700"
+            className="block text-xl font-medium text-gray-700"
           >
-            Payment
+            Payment:
           </label>
           <input
             type="number"

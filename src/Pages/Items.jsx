@@ -126,7 +126,7 @@ const Items = ({}) => {
   };
 
   return (
-    <div className="grid grid-cols-4 gap-4 p-2 mb-12">
+    <div className="grid grid-cols-4 gap-4 p-2 mb-16">
       {products.map((product, index) => (
         <button
           key={index}
