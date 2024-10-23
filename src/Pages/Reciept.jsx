@@ -249,7 +249,18 @@ const Reciept = ({}) => {
 
           <button
             className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all"
-            onClick={() => console.log("Void transaction")}
+            onClick={() => {
+              axios
+                .delete("http://localhost:5000/api/receipt")
+                .then(() => {
+                  // Clear the products state after successfully deleting the receipts
+                  setProducts([]);
+                  console.log("All receipts cleared");
+                })
+                .catch((error) => {
+                  console.error("Failed to delete all receipts", error);
+                });
+            }}
           >
             Void
           </button>

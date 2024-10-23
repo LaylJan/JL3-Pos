@@ -203,3 +203,13 @@ receiptChangeStream.on("change", (change) => {
     }
   });
 });
+
+// Backend route to clear all receipts
+app.delete("/api/receipt", async (req, res) => {
+  try {
+    await Receipt.deleteMany({});
+    res.status(200).json({ message: "All receipts deleted" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete receipts" });
+  }
+});
