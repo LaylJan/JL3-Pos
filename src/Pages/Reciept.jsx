@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import VoidModal from "./Modals/void";
 import axios from "axios";
 
 const Reciept = ({}) => {
@@ -6,6 +7,7 @@ const Reciept = ({}) => {
   const [payment, setPayment] = useState("");
   const [total, setTotal] = useState(0);
   const [change, setChange] = useState(null);
+  const [isVoidModalOpen, setIsVoidModalOpen] = useState(false);
 
   useEffect(() => {
     // Calculate the total
@@ -81,6 +83,30 @@ const Reciept = ({}) => {
       ws.close();
     };
   }, []);
+
+  const handleVoidClick = () => {
+    setIsVoidModalOpen(true);
+  };
+
+  const handleCancelVoid = () => {
+    setIsVoidModalOpen(false);
+  };
+
+  const handleConfirmVoid = () => {
+    // Call the deleteMany endpoint to clear the receipt
+    axios
+      .delete("http://localhost:5000/api/receipt")
+      .then(() => {
+        console.log("Receipt cleared");
+        // Reset state or handle the UI update to clear the receipt list
+        setProducts([]); // Assuming products state stores receipt items
+        setIsVoidModalOpen(false);
+      })
+      .catch((error) => {
+        console.error("Failed to void receipt", error);
+      });
+  };
+
   return (
     <div className="p-2">
       <div className="overflow-x-auto">
@@ -249,18 +275,7 @@ const Reciept = ({}) => {
 
           <button
             className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all"
-            onClick={() => {
-              axios
-                .delete("http://localhost:5000/api/receipt")
-                .then(() => {
-                  // Clear the products state after successfully deleting the receipts
-                  setProducts([]);
-                  console.log("All receipts cleared");
-                })
-                .catch((error) => {
-                  console.error("Failed to delete all receipts", error);
-                });
-            }}
+            onClick={handleVoidClick}
           >
             Void
           </button>
@@ -273,6 +288,11 @@ const Reciept = ({}) => {
           </button>
         </div>
       </div>
+      <VoidModal
+        isOpen={isVoidModalOpen}
+        onCancel={handleCancelVoid}
+        onConfirm={handleConfirmVoid}
+      />
     </div>
   );
 };
