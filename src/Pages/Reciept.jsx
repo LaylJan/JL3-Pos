@@ -93,6 +93,7 @@ const Reciept = ({}) => {
   };
 
   const handleConfirmVoid = () => {
+    setPayment("");
     // Call the deleteMany endpoint to clear the receipt
     axios
       .delete("http://localhost:5000/api/receipt")
