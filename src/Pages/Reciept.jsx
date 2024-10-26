@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import VoidModal from "./Modals/void";
+import ConfirmTransactionModal from "./Modals/confirmTransaction";
 import axios from "axios";
 
 const Reciept = ({}) => {
   const [products, setProducts] = useState([]);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [payment, setPayment] = useState("");
   const [total, setTotal] = useState(0);
   const [change, setChange] = useState(null);
@@ -18,13 +20,22 @@ const Reciept = ({}) => {
     setTotal(totalAmount);
 
     // Calculate the change, only if payment is entered
-    const numericPayment = parseFloat(payment) || 0;
     if (payment) {
       setChange(payment - totalAmount);
     } else {
       setChange(null); // Reset if no payment is entered
     }
   }, [products, payment]);
+
+  const openConfirmTransactionModal = () => setIsConfirmModalOpen(true);
+
+  // Function to handle confirming the transaction
+  const confirmTransaction = () => {
+    console.log("Transaction confirmed");
+    setProducts([]); // Clear products
+    setPayment(""); // Clear payment input
+    setIsConfirmModalOpen(false); // Close modal
+  };
 
   useEffect(() => {
     // Fetch products from the local backend when the component mounts
@@ -283,7 +294,7 @@ const Reciept = ({}) => {
 
           <button
             className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-all"
-            onClick={() => console.log("End transaction")}
+            onClick={openConfirmTransactionModal}
           >
             End Transaction
           </button>
@@ -293,6 +304,15 @@ const Reciept = ({}) => {
         isOpen={isVoidModalOpen}
         onCancel={handleCancelVoid}
         onConfirm={handleConfirmVoid}
+      />
+      <ConfirmTransactionModal
+        isOpen={isConfirmModalOpen}
+        onClose={() => setIsConfirmModalOpen(false)}
+        onConfirm={confirmTransaction}
+        products={products}
+        total={total}
+        payment={payment}
+        change={change}
       />
     </div>
   );
