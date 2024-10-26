@@ -31,10 +31,8 @@ const Reciept = ({}) => {
 
   // Function to handle confirming the transaction
   const confirmTransaction = () => {
-    console.log("Transaction confirmed");
-    setProducts([]); // Clear products
-    setPayment(""); // Clear payment input
-    setIsConfirmModalOpen(false); // Close modal
+    console.log("End Transaction");
+    setIsConfirmModalOpen(false); // Close modal only
   };
 
   useEffect(() => {
