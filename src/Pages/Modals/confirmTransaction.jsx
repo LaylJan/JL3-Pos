@@ -13,18 +13,27 @@ const ConfirmTransactionModal = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-2/5">
         <h2 className="text-2xl font-semibold mb-4">Confirm Transaction</h2>
 
-        <ul>
-          {products.map((product) => (
-            <li key={product._id} className="mb-2">
-              {product.product} - Qty: {product.qty} - Total: ₱
-              {product.price * product.qty}
-            </li>
-          ))}
-        </ul>
+        <div className="grid grid-cols-3 gap-4 font-bold">
+          <div>Product</div>
+          <div>Quantity</div>
+          <div>Total</div>
+        </div>
 
+        {/* Scrollable product list */}
+        <div className="grid grid-cols-3 gap-y-2 gap-x-4 mt-2 h-52 overflow-y-auto auto-rows-min">
+          {products.map((product) => (
+            <React.Fragment key={product._id}>
+              <div>{product.product}</div>
+              <div>{product.qty}</div>
+              <div>₱{product.price * product.qty}</div>
+            </React.Fragment>
+          ))}
+        </div>
+
+        {/* Fixed total, payment, and change information */}
         <p className="mt-4">Total: ₱{total}</p>
         <p>Payment: ₱{payment}</p>
         <p>Change: {change !== null ? `₱${change}` : "-"}</p>
