@@ -213,3 +213,30 @@ app.delete("/api/receipt", async (req, res) => {
     res.status(500).json({ error: "Failed to delete receipts" });
   }
 });
+
+// PUT route to update stock based on product name
+app.put("/api/products", async (req, res) => {
+  const { Product: productName, Stock: newStock } = req.body;
+
+  try {
+    // Find product by name and update the stock
+    const updatedProduct = await Product.findOneAndUpdate(
+      { Product: productName },
+      { Stock: newStock },
+      { new: true }
+    );
+
+    // If product not found, send a 404 response
+    if (!updatedProduct) {
+      return res
+        .status(404)
+        .json({ message: `Product ${productName} not found` });
+    }
+
+    // Send back the updated product data
+    res.json(updatedProduct);
+  } catch (error) {
+    console.error("Error updating product stock:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});

@@ -30,9 +30,57 @@ const Reciept = ({}) => {
   const openConfirmTransactionModal = () => setIsConfirmModalOpen(true);
 
   // Function to handle confirming the transaction
-  const confirmTransaction = () => {
+  const confirmTransaction = async () => {
     console.log("End Transaction");
-    setIsConfirmModalOpen(false); // Close modal only
+
+    try {
+      // Loop through each product in the receipt to update stock
+      for (const item of products) {
+        // Fetch the product data by name
+        const response = await fetch(
+          `http://localhost:5000/api/products?name=${encodeURIComponent(
+            item.Product
+          )}`
+        );
+        const [productData] = await response.json(); // Assuming the backend returns an array with one matching product
+
+        if (!response.ok || !productData) {
+          console.error(
+            `Failed to fetch product ${item.Product}:`,
+            response.statusText
+          );
+          continue;
+        }
+
+        // Calculate the new stock
+        const newStock = productData.Stock - item.qty;
+        if (newStock < 0) {
+          console.warn(`Insufficient stock for product ${productData.Product}`);
+          continue;
+        }
+
+        // Update the product's stock by name
+        await fetch(`http://localhost:5000/api/products`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            Product: productData.Product, // Use the product name as the identifier
+            Stock: newStock,
+          }),
+        });
+      }
+
+      console.log(
+        "Stock updated successfully for all products in the transaction."
+      );
+    } catch (error) {
+      console.error("Error updating stock:", error);
+    } finally {
+      // Close the modal after completing the transaction
+      setIsConfirmModalOpen(false);
+    }
   };
 
   useEffect(() => {
